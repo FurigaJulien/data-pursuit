@@ -1,5 +1,6 @@
 from Classes import Joueur
 import random
+import unidecode as ud
 
 def getNumberOfPlayer():
     """Fonction permettant de récuperer le nombre de joueur, puis de creer ses derniers et de les retourner sous forme de liste"""
@@ -54,10 +55,35 @@ def chooseTheme(themeList):
             print("Veuillez saisir un chiffre ( 1 ou 2)")
 
     print("Vous avez choisi le thème : {}".format(randomThemeChoice[theme_selected-1]))
-
     return randomThemeChoice[theme_selected-1]
+  
+  
 
-chooseTheme(["bleu","rouge","vert"])
+def verif_reponse (reponse_choisie, reponse_attendue):
+    """Comparer la réponse donnée à la réponse attendue et renvoyer True ou False selon qu'elle est juste ou pas."""
+    
+    #Toute les ponctuations qu'on va pouvoir ignorer :
+    ponctuation_gerable = ('!','.',':','?',',',';','_')
+
+    #Transformer la réponse attendue en string au cas où elle serait numérique:
+    reponse_attendue = str(reponse_attendue)
+    
+    #Retrait des ponctuations :
+    reponse_choisie = "".join(x for x in reponse_choisie if x not in ponctuation_gerable)
+    reponse_attendue = "".join(x for x in reponse_attendue if x not in ponctuation_gerable)
+
+    #Retrait des majuscules, espaces et accents :
+    reponse_choisie = ud.unidecode(reponse_choisie.lower().strip())
+    reponse_attendue = ud.unidecode(reponse_attendue.lower().strip())
+
+    #Comparaison des deux strings nettoyés :
+    if reponse_choisie == reponse_attendue:
+        return True
+
+    else :
+        return False
+
+    
 
 def showPlayersScore(playerList):
     """Affichage du score des joueurs en direct"""
@@ -71,3 +97,4 @@ def showPlayersScore(playerList):
                 string="Pas encore validé"
             print("cle : "+string)
         
+

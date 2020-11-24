@@ -58,9 +58,6 @@ def chooseTheme(themeList):
     
     return randomThemeChoice[theme_selected-1]
 
-
-import unidecode as ud
-
 def verif_reponse (reponse_choisie, reponse_attendue):
     """Comparer la réponse donnée à la réponse attendue et renvoyer True ou False selon qu'elle est juste ou pas."""
     

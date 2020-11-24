@@ -1,4 +1,6 @@
 from Classes import Joueur
+import random
+
 def getNumberOfPlayer():
     """Fonction permettant de récuperer le nombre de joueur, puis de creer ses derniers et de les retourner sous forme de liste"""
     #Récupération de l'input saisie & Vérification de la valeur récupérée
@@ -29,4 +31,31 @@ def getAndCreatePlayers(nb_joueur):
         listeJoueurs.append(joueur)
 
     return listeJoueurs
+
+
+def chooseTheme(themeList):
+    """Fonctions permettant a l'utilisateur de choisir parmis 2 themes pris au hasard dans une liste de theme disponibles"""
+
+    randomThemeChoice = random.choices(themeList, k=2)
+
+    print("Vous avez le choix entre les deux thèmes suivant : \n Theme n°1 : {} \n Theme n°2 :{}".format(randomThemeChoice[0],randomThemeChoice[1]))
+
+    #Selection du thème par l'utilisateur
+    verif=False
+    while verif==False:
+        try:
+            theme_selected=input("Selectionnez votre thème (1 ou 2) :")
+            theme_selected=int(theme_selected)
+            if theme_selected<1 or theme_selected>2:
+                print("Le thème choisi doit être 1 ou 2")
+            else:
+                verif=True
+        except:
+            print("Veuillez saisir un chiffre ( 1 ou 2)")
+
+    print("Vous avez choisi le thème : {}".format(randomThemeChoice[theme_selected-1]))
+    
+    return randomThemeChoice[theme_selected-1]
+
+
 

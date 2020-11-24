@@ -54,8 +54,20 @@ def chooseTheme(themeList):
             print("Veuillez saisir un chiffre ( 1 ou 2)")
 
     print("Vous avez choisi le thème : {}".format(randomThemeChoice[theme_selected-1]))
-    
+
     return randomThemeChoice[theme_selected-1]
 
+chooseTheme(["bleu","rouge","vert"])
 
-
+def showPlayersScore(playerList):
+    """Affichage du score des joueurs en direct"""
+    print("Petit point sur les scores !")
+    for player in playerList:
+        print(player.prenom + " :")
+        for cle in player.score.keys():
+            if player.score[cle]==True:
+                string="Validé"
+            else:
+                string="Pas encore validé"
+            print("cle : "+string)
+        

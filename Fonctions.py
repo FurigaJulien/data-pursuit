@@ -55,8 +55,9 @@ def chooseTheme(themeList):
             print("Veuillez saisir un chiffre ( 1 ou 2)")
 
     print("Vous avez choisi le thème : {}".format(randomThemeChoice[theme_selected-1]))
-    
     return randomThemeChoice[theme_selected-1]
+  
+  
 
 def verif_reponse (reponse_choisie, reponse_attendue):
     """Comparer la réponse donnée à la réponse attendue et renvoyer True ou False selon qu'elle est juste ou pas."""
@@ -81,3 +82,19 @@ def verif_reponse (reponse_choisie, reponse_attendue):
 
     else :
         return False
+
+    
+
+def showPlayersScore(playerList):
+    """Affichage du score des joueurs en direct"""
+    print("Petit point sur les scores !")
+    for player in playerList:
+        print(player.prenom + " :")
+        for cle in player.score.keys():
+            if player.score[cle]==True:
+                string="Validé"
+            else:
+                string="Pas encore validé"
+            print("cle : "+string)
+        
+

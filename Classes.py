@@ -19,7 +19,8 @@ class Theme():
 
 class Question():
 
-    def __init__(self,libelle,theme,difficulte,reponses=[]):
+    def __init__(self,id,libelle,theme,difficulte,reponses=[]):
+        self.id=id
         self.libelle=libelle
         self.theme=theme
         self.difficulte=difficulte
@@ -27,7 +28,6 @@ class Question():
 
 class Reponses():
 
-    def __init__(self,id_question,libelle,valeur_reponse):
-        self.id_question=id_question
+    def __init__(self,libelle,valeur_reponse):
         self.libelle=libelle
         self.valeur_reponse=valeur_reponse

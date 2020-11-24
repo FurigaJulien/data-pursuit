@@ -28,6 +28,7 @@ class Question():
 
 class Reponses():
 
-    def __init__(self,libelle,valeur_reponse):
+    def __init__(self,id_question,libelle,valeur_reponse):
+        self.id_question=id_question
         self.libelle=libelle
         self.valeur_reponse=valeur_reponse

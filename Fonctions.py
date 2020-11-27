@@ -39,7 +39,7 @@ def chooseTheme(themeList):
 
     randomThemeChoice = random.choices(themeList, k=2)
 
-    print("Vous avez le choix entre les deux thèmes suivant : \n Theme n°1 : {} \n Theme n°2 :{}".format(randomThemeChoice[0],randomThemeChoice[1]))
+    print("Vous avez le choix entre les deux thèmes suivant : \n Theme n°1 : {} \n Theme n°2 :{}".format(randomThemeChoice[0].libelle,randomThemeChoice[1].libelle))
 
     #Selection du thème par l'utilisateur
     verif=False
@@ -96,4 +96,17 @@ def showPlayersScore(playerList):
                 string="Pas encore validé"
             print("cle : "+string)
         
+
+def get_question(theme, liste_question):
+    """Fonction qui choisi une question en fonction du thème"""
+    choix_question = liste_question[theme]
+    question = random.choices(choix_question, k=1)
+    print(question.libelle)
+    for i in range(len(question.reponse)):
+        print('choix n°{}: {}'.format(i+1,question.reponse[i].libelle))
+        if question.reponse[i].valeur_reponse == 1:
+            reponse = question.reponse[i]
+    choix_question.remove(question)
+    liste_question[theme] = choix_question
+    return question, reponse
 

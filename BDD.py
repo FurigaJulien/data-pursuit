@@ -9,7 +9,7 @@ class BDD():
             'user': 'root',
             'password': 'root',
             'host': 'localhost',
-            'database': 'data_pursuit'
+            'database': 'data-pursuit'
             })
         cls.cursor=cls.link.cursor()
 
@@ -51,7 +51,7 @@ class BDD():
                 question=Question(id,libelle,theme,difficulte)
                 questionList.append(question)
                 
-            questionDict[theme]=questionList
+            questionDict[theme.libelle]=questionList
         cls.close()
         return questionDict
 
@@ -59,14 +59,21 @@ class BDD():
     def getAllResponses(cls,questionDict):
         cls.connect()
         query="SELECT * FROM reponses where id_question={}"
-        for value in questionDict.values():
-            for question in value:
+        for cle in questionDict.keys():
+            for question in questionDict[cle]:
                 cls.cursor.execute(query.format(question.id))
+                listeReponse=[]
                 for row in cls.cursor.fetchall():
                     libelle=str(row[2])
                     valeur_reponse=int(row[3])
                     reponse=Reponses(question.id,libelle,valeur_reponse)
-                    question.reponses.append(reponse)
+                    listeReponse.append(reponse)
+                    question.reponses=listeReponse
+                    print(question.reponses)
+
 
         cls.close()
         return questionDict
+
+
+

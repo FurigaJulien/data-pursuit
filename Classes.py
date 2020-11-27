@@ -16,6 +16,9 @@ class Theme():
         self.id=id
         self.libelle=libelle
 
+    def __repr__(self):
+        return self.libelle
+
 
 class Question():
 
@@ -26,9 +29,14 @@ class Question():
         self.difficulte=difficulte
         self.reponses=reponses
 
+    def __repr__(self):
+        return self.libelle
 class Reponses():
 
     def __init__(self,id_question,libelle,valeur_reponse):
         self.id_question=id_question
         self.libelle=libelle
         self.valeur_reponse=valeur_reponse
+
+    def __repr__(self):
+        return self.libelle

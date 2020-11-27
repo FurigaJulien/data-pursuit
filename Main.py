@@ -1,7 +1,7 @@
 from Fonctions import *
 from BDD import *
 
-"""def dataPursuit():
+def dataPursuit():
 
     nb_of_player=getNumberOfPlayer()
     liste_joueur=getAndCreatePlayers(nb_of_player)
@@ -24,32 +24,30 @@ from BDD import *
 
 
         for joueur in liste_joueur:
-            print(joueur.prenom + " c'est ton tour")
-            # Choix du thème
-            themeChoosen=chooseTheme(themeList)
+            if victory!=True:
+                print(joueur.prenom + " c'est ton tour")
+                # Choix du thème
+                themeChoosen=chooseTheme(themeList)
 
-            question,reponse_attendue=get_question(themeChoosen,questionList)
-
-
-
-            #Vérification de la réponse
-            if verif_reponse(,reponse_attendue)==True:
-                joueur.score[themeChoosen]=True
+                question,reponse_attendue=get_question(themeChoosen,question_list)
 
 
+                reponse_choisie=choisir_reponse(question.reponses)
 
-            #Vérification de la condition de victoire
-            if testvar not in joueur.score:
-                victory=True
-                winner=joueur"""
+                #Vérification de la réponse
+                if verif_reponse(reponse_choisie,reponse_attendue,question.reponses)==True:
+                    joueur.score[themeChoosen]=True
+                    print("Bonne réponse !")
+                else:
+                    print("Mauvaise réponse !")
 
 
 
+                #Vérification de la condition de victoire
+                if testvar not in joueur.score.values():
+                    victory=True
+                    winner=joueur
+                    print("Bravo {}, tu es notre champion !".format(winner.prenom))
+                    
 
-
-themeList=BDD.getAllTheme()
-question_list=BDD.getAllResponses(BDD.getAllQuestions(BDD.getAllTheme()))
-
-themeChoosen=chooseTheme(themeList)
-
-question,reponse_attendue=get_question(themeChoosen,question_list)
+dataPursuit()

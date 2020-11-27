@@ -69,7 +69,7 @@ class BDD():
                     reponse=Reponses(question.id,libelle,valeur_reponse)
                     listeReponse.append(reponse)
                     question.reponses=listeReponse
-                    print(question.reponses)
+                   
 
 
         cls.close()

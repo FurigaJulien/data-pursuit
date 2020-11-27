@@ -59,22 +59,23 @@ def chooseTheme(themeList):
   
   
 
-def verif_reponse (reponse_choisie, reponse_attendue):
+def verif_reponse (reponse_choisie, reponse_attendue,reponses):
     """Comparer la réponse donnée à la réponse attendue et renvoyer True ou False selon qu'elle est juste ou pas."""
     
-    #Toute les ponctuations qu'on va pouvoir ignorer :
-    ponctuation_gerable = ('!','.',':','?',',',';','_')
+    if len(reponses)==1:
+        #Toute les ponctuations qu'on va pouvoir ignorer :
+        ponctuation_gerable = ('!','.',':','?',',',';','_')
 
-    #Transformer la réponse attendue en string au cas où elle serait numérique:
-    reponse_attendue = str(reponse_attendue)
-    
-    #Retrait des ponctuations :
-    reponse_choisie = "".join(x for x in reponse_choisie if x not in ponctuation_gerable)
-    reponse_attendue = "".join(x for x in reponse_attendue if x not in ponctuation_gerable)
+        #Transformer la réponse attendue en string au cas où elle serait numérique:
+        reponse_attendue = str(reponse_attendue)
+        
+        #Retrait des ponctuations :
+        reponse_choisie = "".join(x for x in reponse_choisie if x not in ponctuation_gerable)
+        reponse_attendue = "".join(x for x in reponse_attendue if x not in ponctuation_gerable)
 
-    #Retrait des majuscules, espaces et accents :
-    reponse_choisie = ud.unidecode(reponse_choisie.lower().strip())
-    reponse_attendue = ud.unidecode(reponse_attendue.lower().strip())
+        #Retrait des majuscules, espaces et accents :
+        reponse_choisie = ud.unidecode(reponse_choisie.lower().strip())
+        reponse_attendue = ud.unidecode(reponse_attendue.lower().strip())
 
     #Comparaison des deux strings nettoyés :
     if reponse_choisie == reponse_attendue:
@@ -107,7 +108,27 @@ def get_question(theme, liste_question):
             print('choix n°{}: {}'.format(i+1,question.reponses[i].libelle))
             if question.reponses[i].valeur_reponse == 1:
                 reponse = question.reponses[i]
+    else:
+        reponse=question.reponses[0]
     choix_question.remove(question)
     liste_question[str(theme)] = choix_question
     return question, reponse
 
+
+def choisir_reponse (reponse):
+    """Le joueur saisi la réponse à la question posée précedemment"""
+
+    verif = False
+    while verif == False:
+        reponse_choisie = str(input(f"Quelle est votre réponse : "))
+        if type(reponse_choisie) == str:
+            if len(reponse) == 1:
+                verif = True
+                return reponse_choisie
+            if len(reponse) > 1 and reponse_choisie.isnumeric():
+                if int(reponse_choisie) >= 1 and int(reponse_choisie) <= len(reponse):
+                    verif = True
+                else: print(f"on souhaite que la réponse choisie soit entre 1 et {len(reponse)}")
+            else : print("warning la réponse attendue est numérique, on souhaite que la réponse choisie soit entre 1 et {len(reponse)} ")
+
+    return(reponse[int(reponse_choisie)-1])

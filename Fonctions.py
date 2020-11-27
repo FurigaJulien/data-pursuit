@@ -25,7 +25,7 @@ def getAndCreatePlayers(nb_joueur):
     """Fonction permettant de creer les joueurs et de retourner ces derniers stockés dans une liste"""
     listeJoueurs=[]
     for i in range(nb_joueur): 
-
+        
         nom_joueur=input("Saisissez le nom du joueur {} : ".format(i+1))
         nom_joueur=str(nom_joueur)
         joueur=Joueur(nom_joueur)
@@ -79,7 +79,6 @@ def verif_reponse (reponse_choisie, reponse_attendue):
     #Comparaison des deux strings nettoyés :
     if reponse_choisie == reponse_attendue:
         return True
-
     else :
         return False
 

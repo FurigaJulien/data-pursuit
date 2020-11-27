@@ -68,5 +68,5 @@ class BDD():
                     reponse=Reponses(question.id,libelle,valeur_reponse)
                     question.reponses.append(reponse)
 
-
+        cls.close()
         return questionDict

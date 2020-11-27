@@ -1,16 +1,16 @@
 from Fonctions import *
 from BDD import *
 
-def dataPursuit():
+"""def dataPursuit():
 
     nb_of_player=getNumberOfPlayer()
     liste_joueur=getAndCreatePlayers(nb_of_player)
     themeList=BDD.getAllTheme()
-    questionList=BDD.getAllResponses(BDD.getAllQuestions)
+    question_list=BDD.getAllResponses(BDD.getAllQuestions(BDD.getAllTheme()))
 
 
     victory=False
-    
+    testvar=False
     tour=0
 
     #Ajout du score 
@@ -28,20 +28,28 @@ def dataPursuit():
             # Choix du thème
             themeChoosen=chooseTheme(themeList)
 
+            question,reponse_attendue=get_question(themeChoosen,questionList)
 
 
 
             #Vérification de la réponse
-            if verif_reponse()==True:
+            if verif_reponse(,reponse_attendue)==True:
                 joueur.score[themeChoosen]=True
 
 
 
             #Vérification de la condition de victoire
-            if False not in joueur.score:
+            if testvar not in joueur.score:
                 victory=True
-                winner=joueur
-            
+                winner=joueur"""
 
 
 
+
+
+themeList=BDD.getAllTheme()
+question_list=BDD.getAllResponses(BDD.getAllQuestions(BDD.getAllTheme()))
+
+themeChoosen=chooseTheme(themeList)
+
+question,reponse_attendue=get_question(themeChoosen,question_list)

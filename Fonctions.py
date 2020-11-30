@@ -20,20 +20,20 @@ def getNumberOfPlayer():
     return nb_joueur
 
 
-def getAndCreatePlayers(nb_joueur):
+# def getAndCreatePlayers(nb_joueur):
 
-    """Fonction permettant de creer les joueurs et de retourner ces derniers stockés dans une liste"""
-    listeJoueurs=[]
-    for i in range(nb_joueur): 
+#     """Fonction permettant de creer les joueurs et de retourner ces derniers stockés dans une liste"""
+#     listeJoueurs=[]
+#     for i in range(nb_joueur): 
         
-        nom_joueur=input("Saisissez le nom du joueur {} : ".format(i+1))
-        nom_joueur=str(nom_joueur)
-        score={}
-        joueur=Joueur(nom_joueur,score=score)
+#         nom_joueur=input("Saisissez le nom du joueur {} : ".format(i+1))
+#         nom_joueur=str(nom_joueur)
+#         score={}
+#         joueur=Joueur(nom_joueur,score=score)
         
-        listeJoueurs.append(joueur)
+#         listeJoueurs.append(joueur)
 
-    return listeJoueurs
+#     return listeJoueurs
 
 
 def chooseTheme(themeList):
@@ -101,7 +101,7 @@ def showPlayersScore(playerList):
         
 
 def get_question(theme, liste_question):
-    """Fonction qui choisi une question en fonction du thème"""
+    """Fonction qui choisit une question en fonction du thème"""
     choix_question = liste_question[theme]
     question = random.choices(choix_question, k=1)[0]
     print(question.libelle)
@@ -118,7 +118,7 @@ def get_question(theme, liste_question):
 
 
 def choisir_reponse (reponse):
-    """Le joueur saisi la réponse à la question posée précedemment"""
+    """Le joueur saisit la réponse à la question posée précedemment"""
 
     verif = False
     while verif == False:

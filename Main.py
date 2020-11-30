@@ -1,5 +1,7 @@
 from Fonctions import *
 from BDD import *
+from Application import *
+
 
 def dataPursuit():
 
@@ -12,7 +14,8 @@ def dataPursuit():
     victory=False
     testvar=False
     tour=0
-
+    
+    app=Application()
     #Ajout du score 
     for joueur in liste_joueur:
         for theme in themeList:
@@ -27,20 +30,8 @@ def dataPursuit():
             if victory!=True:
                 print(joueur.prenom + " c'est ton tour")
                 # Choix du thème
-                themeChoosen=chooseTheme(themeList)
-
-                question,reponse_attendue=get_question(themeChoosen,question_list)
-
-
-                reponse_choisie=choisir_reponse(question.reponses)
-
-                #Vérification de la réponse
-                if verif_reponse(reponse_choisie,reponse_attendue,question.reponses)==True:
-                    joueur.score[themeChoosen]=True
-                    print("Bonne réponse !")
-                else:
-                    print("Mauvaise réponse !")
-
+                app.affichageQuestions(tour,joueur)
+                app.mainloop()
 
 
                 #Vérification de la condition de victoire
@@ -49,5 +40,5 @@ def dataPursuit():
                     winner=joueur
                     print("Bravo {}, tu es notre champion !".format(winner.prenom))
                     
-
+    
 dataPursuit()

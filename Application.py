@@ -102,7 +102,7 @@ class Application(tk.Tk):
             widget.destroy()
 
         print(self.questionList)
-        print(theme)
+        self.actualTheme=theme
         tk.Label(self.gameFrame,text="Vouz avez choisi le thème {}".format(theme.libelle)).pack(pady=12)
 
         self.question,self.bonneReponse=get_question(theme.libelle,self.questionList)
@@ -128,13 +128,15 @@ class Application(tk.Tk):
             
     def recupAndCheckReponses(self,reponseJoueur):
         nextPlayer=self.tourNumber%len(self.playerList)
-        print(nextPlayer)
-        print(self.tourNumber)
+        actualPlayer=(self.tourNumber-1)%len(self.playerList)
+    
         if len(self.question.reponses)>1:
             if verif_reponse(reponseJoueur,self.bonneReponse,self.question.reponses)==True:
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Bravo :)").pack()
+                print(self.playerList[actualPlayer].prenom)
+                self.playerList[actualPlayer].score[self.actualTheme]=True
                 tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
             
               
@@ -151,6 +153,7 @@ class Application(tk.Tk):
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Bravo :)").pack()
+                self.playerList[actualPlayer].score[self.actualTheme]=True
                 tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
                 
                 
@@ -174,6 +177,7 @@ class Application(tk.Tk):
             tk.Label(self.frameScore,text="Joueur : {}".format(joueur.prenom)).pack(pady=12)
             for theme in joueur.score.keys():
                 tk.Label(self.frameScore,text = "Thème ={}".format(theme.libelle)).pack()
+                print(id(joueur.score))
                 if joueur.score[theme] == True:
                     tk.Label(self.frameScore,text="OK").pack()
                 else:

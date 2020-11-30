@@ -36,16 +36,8 @@ class Application(tk.Tk):
 
         self.resultats.pack(fill="both",expand="yes")
         self.continueGame=True
-        nb_of_player=getNumberOfPlayer()
-        self.playerList=getAndCreatePlayers(nb_of_player)
+
         #Ajout du score 
-        for joueur in self.playerList:
-            for theme in self.themeList:
-                joueur.score[theme]=False
-
-        self.affichageQuestions(self.tourNumber,self.playerList[0])
-
-
 
 # page du choix du nombre de joueurs
     def pageAcceuil(self):
@@ -76,7 +68,7 @@ class Application(tk.Tk):
 
 
     def choixDesNoms(self):
-        nombre_joueur = self.varGr.get()
+        self.nombre_joueur = self.varGr.get()
         for widget in self.resultats.winfo_children():
             widget.destroy()
         self.nomFrame = tk.Frame(self.resultats)
@@ -90,13 +82,26 @@ class Application(tk.Tk):
         bleu = tk.StringVar()
         jaune = tk.StringVar()
         vert = tk.StringVar()
-        liste_joueurs = [rouge, bleu, jaune, vert]
-        for i in range(int(nombre_joueur)):
-            self.champNom = tk.Entry(self.nomFrame, text = "Joueur :",textvariable = liste_joueurs[i], width=20, justify="center")
+        self.liste_joueurs = [rouge, bleu, jaune, vert]
+        for i in range(int(self.nombre_joueur)):
+            self.champNom = tk.Entry(self.nomFrame, text = "Joueur :",textvariable = self.liste_joueurs[i], width=20, justify="center")
             self.champNom.pack(side='left', expand=1)
         #le bouton de validation
-        self.BoutonValidation = tk.Button(self.resultats, text = "Valider", height=6, width=20, bd=2, bg="#dbdbdb")
+        self.BoutonValidation = tk.Button(self.resultats, text = "Valider",command=self.startPlaying, height=6, width=20, bd=2, bg="#dbdbdb")
         self.BoutonValidation.pack(side="bottom")
+
+    def startPlaying(self):
+        self.playerList=[]
+        for i in range(int(self.nombre_joueur)):
+            score={}
+            joueur=Joueur(self.liste_joueurs[i].get(),score=score)
+            self.playerList.append(joueur)
+
+        for joueur in self.playerList:
+            for theme in self.themeList:
+                joueur.score[theme]=False
+
+        self.affichageQuestions(self.tourNumber,self.playerList[0])
 
 
 
@@ -108,7 +113,7 @@ class Application(tk.Tk):
         for widget in self.resultats.winfo_children():
             widget.forget()
 
-        if continueGame==True:
+        if self.continueGame==True:
 
             
             self.jeuFrame2=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=250)

@@ -39,23 +39,23 @@ def chooseTheme(themeList):
 
     randomThemeChoice = random.choices(themeList, k=2)
 
-    print("Vous avez le choix entre les deux thèmes suivant : \n Theme n°1 : {} \n Theme n°2 :{}".format(randomThemeChoice[0].libelle,randomThemeChoice[1].libelle))
+    #print("Vous avez le choix entre les deux thèmes suivant : \n Theme n°1 : {} \n Theme n°2 :{}".format(randomThemeChoice[0].libelle,randomThemeChoice[1].libelle))
 
     #Selection du thème par l'utilisateur
-    verif=False
-    while verif==False:
-        try:
-            theme_selected=input("Selectionnez votre thème (1 ou 2) :")
-            theme_selected=int(theme_selected)
-            if theme_selected<1 or theme_selected>2:
-                print("Le thème choisi doit être 1 ou 2")
-            else:
-                verif=True
-        except:
-            print("Veuillez saisir un chiffre ( 1 ou 2)")
+    #verif=False
+    #while verif==False:
+        #try:
+            #theme_selected=input("Selectionnez votre thème (1 ou 2) :")
+            #theme_selected=int(theme_selected)
+    #         if theme_selected<1 or theme_selected>2:
+    #             print("Le thème choisi doit être 1 ou 2")
+    #         else:
+    #             verif=True
+    #     except:
+    #         print("Veuillez saisir un chiffre ( 1 ou 2)")
 
-    print("Vous avez choisi le thème : {}".format(randomThemeChoice[theme_selected-1]))
-    return randomThemeChoice[theme_selected-1].libelle
+    # print("Vous avez choisi le thème : {}".format(randomThemeChoice[theme_selected-1]))
+    return randomThemeChoice
   
   
 
@@ -67,7 +67,7 @@ def verif_reponse (reponse_choisie, reponse_attendue,reponses):
         ponctuation_gerable = ('!','.',':','?',',',';','_')
 
         #Transformer la réponse attendue en string au cas où elle serait numérique:
-        reponse_attendue = str(reponse_attendue)
+        reponse_attendue = str(reponses[0].libelle)
         
         #Retrait des ponctuations :
         reponse_choisie = "".join(x for x in reponse_choisie if x not in ponctuation_gerable)
@@ -111,7 +111,7 @@ def get_question(theme, liste_question):
     else:
         reponse=question.reponses[0]
     choix_question.remove(question)
-    liste_question[str(theme)] = choix_question
+    liste_question[theme] = choix_question
     return question, reponse
 
 

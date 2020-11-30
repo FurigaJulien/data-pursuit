@@ -46,6 +46,8 @@ class Application(tk.Tk):
 
         
 
+
+        self.affichage_joueurs_scores(liste_joueur)
         
 
 
@@ -158,6 +160,24 @@ class Application(tk.Tk):
                 
             
 
+
+    def affichage_joueurs_scores(self, liste_joueurs):
+        self.frameScore = tk.Frame(self.jeuFrame2)
+        self.frameScore.pack()
+        tk.Label(self.frameScore,text="Scores :").pack()   
+
+        #Boucle qui crée un bloc par joueur grâce à la liste de joueurs passée en paramètre de la fonction
+        numero_de_joueur = 1
+        for joueur in liste_joueurs:
+            tk.Label(self.frameScore,text="Joueur {} : {}".format(joueur)).pack(pady=12)
+            for theme,reussite in joueur.score:
+                tk.Label(self.frameScore,text = "Thème ={}".format(theme)).pack()
+                if reussite == True:
+                    tk.Label(self.frameScore,text="OK").pack()
+                elif reussite == True:
+                    tk.Label(self.frameScore,text="Pas OK").pack()
+            numero_de_joueur += 1
+
             
 def dataPursuit():
 
@@ -165,6 +185,7 @@ def dataPursuit():
 
         app=Application()
         app.mainloop()
+
 
         
 dataPursuit()

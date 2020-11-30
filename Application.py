@@ -23,6 +23,7 @@ class Application(tk.Tk):
         self.themeList=BDD.getAllTheme()
         self.questionList=BDD.getAllResponses(BDD.getAllQuestions(self.themeList))
         self.tourNumber=0
+        self.nombreDeTour=0
 
         """Titre"""
         self.champ_titre=tk.Label(self,text="Projet Data-pursuit",padx="10",pady="10")
@@ -115,7 +116,7 @@ class Application(tk.Tk):
 
         if self.continueGame==True:
 
-            
+            self.nombreDeTour=self.nombreDeTour+1
             self.jeuFrame2=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=250)
             self.jeuFrame2.pack(side="right",expand="yes",fill="both")
             self.affichage_joueurs_scores(self.playerList)
@@ -126,7 +127,7 @@ class Application(tk.Tk):
             #Affichage du tour en cours
             self.frameNumeroTour=tk.Frame(self.jeuFrame)
             self.frameNumeroTour.pack(fill="x")
-            self.numero_tour=tk.Label(self.frameNumeroTour,text="Tour n°{}".format(tourNumber))
+            self.numero_tour=tk.Label(self.frameNumeroTour,text="Tour n°{}".format(self.nombreDeTour))
             self.numero_tour.pack(side="right")
 
             self.nomJoueurFrame=tk.Frame(self.jeuFrame)
@@ -194,7 +195,8 @@ class Application(tk.Tk):
                 if False not in self.playerList[actualPlayer].score:
                     self.continueGame=False
                     self.winner=self.playerList[actualPlayer]
-
+                nextPlayer=actualPlayer
+                self.tourNumber=self.tourNumber-1
                 tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
             
               
@@ -215,6 +217,8 @@ class Application(tk.Tk):
                 if False not in self.playerList[actualPlayer].score:
                     self.continueGame=False
                     self.winner=self.playerList[actualPlayer]
+                nextPlayer=actualPlayer
+                self.tourNumber=self.tourNumber-1
                 tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
                 
                 

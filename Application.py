@@ -30,6 +30,10 @@ class Application(tk.Tk):
         self.champ_titre.pack(side="top")
         
         self.resultats=tk.Frame(self)
+
+        self.resultats.pack(fill ="both", expand="yes")
+        self.pageAcceuil()
+
         self.resultats.pack(fill="both",expand="yes")
         self.continueGame=True
         nb_of_player=getNumberOfPlayer()
@@ -43,10 +47,62 @@ class Application(tk.Tk):
 
 
 
+# page du choix du nombre de joueurs
     def pageAcceuil(self):
-        """Ronan"""
+        # Création de la fenêtre de l'application
+        self.AcceuilFrame = tk.Frame(self.resultats)
+        self.AcceuilFrame.pack(expand="YES")
+        # le titre
+        self.AcceuilTitre = tk.Label(self.AcceuilFrame, text="Paramètres de Partie", pady="20")
+        self.AcceuilTitre.config(font=("Courier", 25))
+        self.AcceuilTitre.pack(side = "top")
+        self.TitreChoixJoueurs = tk.Label(self.AcceuilFrame, text="Combien de joueurs ?")
+        self.TitreChoixJoueurs.pack()
+        self.TitreChoixJoueurs.config(font=("Courier", 20))
+        #Les boutons "Radio"
+        self.ChoixJoueurs = tk.Label(self.AcceuilFrame)
+        vals = ['1', '2', '3', '4']
+        etiqs = ['1 Joueur', '2 Joueurs', '3 Joueurs', '4 Joueurs']
+        self.varGr = tk.StringVar()
+        self.varGr.set(vals[1])
+        for i in range(4):
+            self.ChoixJoueurs = tk.Radiobutton(self.AcceuilFrame, variable=self.varGr, text=etiqs[i], value=vals[i])
+            self.ChoixJoueurs.pack(side='left', expand=1)
+        #le bouton de validation
+        self.BoutonChoixJoueurs = tk.Button(self.resultats, text = "Valider", height=6, width=20, bd=2, bg="#dbdbdb")
+        self.BoutonChoixJoueurs.config(command=partial(self.choixDesNoms))
+        self.BoutonChoixJoueurs.pack(side="bottom")
 
 
+
+    def choixDesNoms(self):
+        nombre_joueur = self.varGr.get()
+        for widget in self.resultats.winfo_children():
+            widget.destroy()
+        self.nomFrame = tk.Frame(self.resultats)
+        self.nomFrame.pack(expand="YES")
+        self.nomTitre = tk.Label(self.nomFrame, text="Nom des Joueurs", pady="20")
+        self.nomTitre.config(font=("Courier", 25))
+        self.nomTitre.pack(side = "top")
+        self.champNom = tk.Label(self.nomFrame)
+        #boucle d'affichage des champs en fonction du nombre de joueurs choisis
+        rouge = tk.StringVar()
+        bleu = tk.StringVar()
+        jaune = tk.StringVar()
+        vert = tk.StringVar()
+        liste_joueurs = [rouge, bleu, jaune, vert]
+        for i in range(int(nombre_joueur)):
+            self.champNom = tk.Entry(self.nomFrame, text = "Joueur :",textvariable = liste_joueurs[i], width=20, justify="center")
+            self.champNom.pack(side='left', expand=1)
+        #le bouton de validation
+        self.BoutonValidation = tk.Button(self.resultats, text = "Valider", height=6, width=20, bd=2, bg="#dbdbdb")
+        self.BoutonValidation.pack(side="bottom")
+
+
+
+
+
+    """def affichageQuestions(self):"""
     def affichageQuestions(self,tourNumber,playerTurn):
 
         for widget in self.resultats.winfo_children():
@@ -88,10 +144,6 @@ class Application(tk.Tk):
                 tk.Button(self.gameFrame,text=self.themeChoice[i].libelle,command=partial(self.afficherQuestionReponses,self.themeChoice[i])).grid(row=1,column=i)
         else:
             tk.Label(self.resultats,text="Bravo {}, tu remporte cette partie !".format(self.winner.prenom)).pack()
-
-
-
-
 
 
     def afficherQuestionReponses(self,theme):
@@ -191,12 +243,11 @@ class Application(tk.Tk):
             
 def dataPursuit():
 
-        
-
         app=Application()
         app.mainloop()
 
 
         
 dataPursuit()
+
 

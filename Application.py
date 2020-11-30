@@ -47,7 +47,7 @@ class Application(tk.Tk):
         
 
 
-        self.affichage_joueurs_scores(liste_joueur)
+        
         
 
 
@@ -58,6 +58,10 @@ class Application(tk.Tk):
     def affichageQuestions(self,tourNumber,playerTurn):
         for widget in self.resultats.winfo_children():
             widget.forget()
+        
+        self.jeuFrame2=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=250)
+        self.jeuFrame2.pack(side="right",expand="yes",fill="both")
+        self.affichage_joueurs_scores(self.playerList)
         self.tourNumber=self.tourNumber+1
         self.jeuFrame=tk.Frame(self.resultats)
         self.jeuFrame.pack(side="left",expand="yes",fill="both")
@@ -91,8 +95,6 @@ class Application(tk.Tk):
 
 
 
-        self.jeuFrame2=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=250)
-        self.jeuFrame2.pack(side="right",expand="yes",fill="both")
 
 
     def afficherQuestionReponses(self,theme):
@@ -169,12 +171,12 @@ class Application(tk.Tk):
         #Boucle qui crée un bloc par joueur grâce à la liste de joueurs passée en paramètre de la fonction
         numero_de_joueur = 1
         for joueur in liste_joueurs:
-            tk.Label(self.frameScore,text="Joueur {} : {}".format(joueur)).pack(pady=12)
-            for theme,reussite in joueur.score:
-                tk.Label(self.frameScore,text = "Thème ={}".format(theme)).pack()
-                if reussite == True:
+            tk.Label(self.frameScore,text="Joueur : {}".format(joueur.prenom)).pack(pady=12)
+            for theme in joueur.score.keys():
+                tk.Label(self.frameScore,text = "Thème ={}".format(theme.libelle)).pack()
+                if joueur.score[theme] == True:
                     tk.Label(self.frameScore,text="OK").pack()
-                elif reussite == True:
+                else:
                     tk.Label(self.frameScore,text="Pas OK").pack()
             numero_de_joueur += 1
 

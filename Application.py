@@ -14,20 +14,18 @@ class Application(tk.Tk):
         self.geometry("1024x720")
         self.create_widget()
         self.v=tk.IntVar()
-        
-        
-        
-        
-        
+
+
 
 
     def create_widget(self):
-
+        
+        
         self.menubar = tk.Menu(self)
         self.config(menu=self.menubar)
         self.themeList=BDD.getAllTheme()
         self.questionList=BDD.getAllResponses(BDD.getAllQuestions(self.themeList))
-    
+        self.tourNumber=0
 
         """Titre"""
         self.champ_titre=tk.Label(self,text="Projet Data-pursuit",padx="10",pady="10")
@@ -36,7 +34,17 @@ class Application(tk.Tk):
         
         self.resultats=tk.Frame(self)
         self.resultats.pack(fill="both",expand="yes")
-        self.affichageQuestions()
+
+        nb_of_player=getNumberOfPlayer()
+        self.playerList=getAndCreatePlayers(nb_of_player)
+        #Ajout du score 
+        for joueur in self.playerList:
+            for theme in self.themeList:
+                joueur.score[theme]=False
+
+        self.affichageQuestions(self.tourNumber,self.playerList[0])
+
+        
 
 
         self.affichage_joueurs_scores(liste_joueur)
@@ -47,23 +55,23 @@ class Application(tk.Tk):
         """Ronan"""
 
 
-    def affichageQuestions(self):
+    def affichageQuestions(self,tourNumber,playerTurn):
         for widget in self.resultats.winfo_children():
             widget.forget()
-
+        self.tourNumber=self.tourNumber+1
         self.jeuFrame=tk.Frame(self.resultats)
         self.jeuFrame.pack(side="left",expand="yes",fill="both")
 
         #Affichage du tour en cours
         self.frameNumeroTour=tk.Frame(self.jeuFrame)
         self.frameNumeroTour.pack(fill="x")
-        self.numero_tour=tk.Label(self.frameNumeroTour,text="Tour n°")
+        self.numero_tour=tk.Label(self.frameNumeroTour,text="Tour n°{}".format(tourNumber))
         self.numero_tour.pack(side="right")
 
         self.nomJoueurFrame=tk.Frame(self.jeuFrame)
         self.nomJoueurFrame.pack()
 
-        self.nom_joueur=tk.Label(self.nomJoueurFrame,text='Nom Joueur')
+        self.nom_joueur=tk.Label(self.nomJoueurFrame,text=playerTurn.prenom)
         self.nom_joueur.pack()
 
         self.gameFrame=tk.Frame(self.jeuFrame)
@@ -117,32 +125,41 @@ class Application(tk.Tk):
 
             
     def recupAndCheckReponses(self,reponseJoueur):
+        nextPlayer=self.tourNumber%len(self.playerList)
+        print(nextPlayer)
+        print(self.tourNumber)
         if len(self.question.reponses)>1:
             if verif_reponse(reponseJoueur,self.bonneReponse,self.question.reponses)==True:
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Bravo :)").pack()
-                print("coucou")
-                tk.Button(self.reponsesFrame,text="Joueur suivant",command=self.affichageQuestions).pack()
+                tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
+            
+              
             else:
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Dommage :(").pack()
-                print("coucou")
-                tk.Button(self.reponsesFrame,text="Joueur suivant",command=self.affichageQuestions).pack()
+                tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
+
+                
+                
         else:
             if verif_reponse(str(self.reponseJoueur.get()),self.bonneReponse,self.question.reponses)==True:
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Bravo :)").pack()
-                print("coucou")
-                tk.Button(self.reponsesFrame,text="Joueur suivant",command=self.affichageQuestions).pack()
+                tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
+                
+                
             else:
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Dommage :(").pack()
-                print("coucou")
-                tk.Button(self.reponsesFrame,text="Joueur suivant",command=self.affichageQuestions).pack()
+                tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
+                
+            
+
 
     def affichage_joueurs_scores(self, liste_joueurs):
         self.frameScore = tk.Frame(self.jeuFrame2)
@@ -161,7 +178,15 @@ class Application(tk.Tk):
                     tk.Label(self.frameScore,text="Pas OK").pack()
             numero_de_joueur += 1
 
+            
+def dataPursuit():
+
         
 
-app=Application()
-app.mainloop()
+        app=Application()
+        app.mainloop()
+
+
+        
+dataPursuit()
+

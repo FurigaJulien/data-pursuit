@@ -28,7 +28,9 @@ def getAndCreatePlayers(nb_joueur):
         
         nom_joueur=input("Saisissez le nom du joueur {} : ".format(i+1))
         nom_joueur=str(nom_joueur)
-        joueur=Joueur(nom_joueur)
+        score={}
+        joueur=Joueur(nom_joueur,score=score)
+        
         listeJoueurs.append(joueur)
 
     return listeJoueurs

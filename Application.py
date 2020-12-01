@@ -223,8 +223,48 @@ class Application(tk.Tk):
 
     
     def movePlayerLeft(self):
-        self.dice=-self.dice
-        self.movePlayerRight()
+    def movePlayerRight(self):
+        x=self.playerList[(self.tourNumber-1)%len(self.playerList)].position[0]
+        y=self.playerList[(self.tourNumber-1)%len(self.playerList)].position[1]
+        
+        if x!=9 and x-self.dice<10 and y==0:
+            x=x+self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x!=9 and x+self.dice>9 and y==0:
+            x1=9-x
+            x=9
+            y=self.dice-x1
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==9 and  y+self.dice<11:
+            y=y+self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==9 and x+self.dice>10:
+            y1=10-y
+            y=10
+            x=x-(self.dice-y1)
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif y==10 and x-self.dice>=0:
+            x=x-self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x!=0 and x-self.dice<0 and y==10:
+            x1=x
+            x=0
+            y=10-(self.dice-x1)
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==0 and y-self.dice>=0:
+            y=y-self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==0 and y-self.dice<0:
+            y1=y
+            y=0
+            x=self.dice-y1 
+            print("coucou")
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+
+        
+
+        self.updatePlateau()
+        self.afficherQuestionReponses(self.themeList[0])
 
 
         
@@ -318,23 +358,45 @@ class Application(tk.Tk):
             
 
 
-    def affichage_joueurs_scores(self, liste_joueurs):
-        self.frameScore = tk.Frame(self.jeuFrame2)
-        self.frameScore.pack()
-        tk.Label(self.frameScore,text="Scores :").pack()   
+     def affichage_joueurs_scores(self, liste_joueurs):
+        """Fonction qui gère l'affichage des scores de chaque joueur pour chaque thème"""
+        #On crée le label titre de la frame de droite du jeu : 
+        tk.Label(self.jeuFrame2,text="Scores :").pack()
 
-        #Boucle qui crée un bloc par joueur grâce à la liste de joueurs passée en paramètre de la fonction
-        numero_de_joueur = 1
+        #On crée une liste de frames qui accueillera les frames des différents joueurs (taille variable) :
+        liste_frames = []
+
+        #On itère sur notre liste de joueur pour ajouter le bon nombre de frames dans une liste de frames :
         for joueur in liste_joueurs:
-            tk.Label(self.frameScore,text="Joueur : {}".format(joueur.prenom)).pack(pady=12)
-            for theme in joueur.score.keys():
-                tk.Label(self.frameScore,text = "Thème ={}".format(theme.libelle)).pack()
-                print(id(joueur.score))
-                if joueur.score[theme] >2 :
-                    tk.Label(self.frameScore,text="OK").pack()
-                else:
-                    tk.Label(self.frameScore,text="{}/3".format(joueur.score[theme])).pack()
-            numero_de_joueur += 1
+            liste_frames.append(tk.Frame(self.jeuFrame2))
+
+        #On crée un numero de joueur qui commence à zéro et sera incrémenté pour prendre le bon prénom dans la liste d'objets joueurs.
+        num_joueur = 0
+
+        #On itère sur nos frames dans la liste afin de remplir chacune comme il faut :
+        for frame in liste_frames :
+
+            #on crée un label joueur :
+            tk.Label(frame, text = "Joueur :").grid(row = 0, column = 0)
+            #on crée un label pour le prénom du joueur pris dans la liste d'objets joueurs et dont la couleur correspond à l'attribut couleur de cet objet joueur :
+            tk.Label(frame, text = liste_joueurs[num_joueur].prenom, fg = liste_joueurs[num_joueur].couleur,).grid(row = 0, column = 1)
+
+            #On boucle sur les thèmes pour les afficher sous le nom du joueur et ce quel que soit le nombre de thèmes
+            for theme in self.themeList :
+                #On crée le label qui affichera le nom du thème pour le joueur en cours :
+                tk.Label(frame, text = theme.libelle+" :").grid(row = 1+self.themeList.index(theme), column = 0)
+                #On remplit une variable score avec le score de thème pour le thème sur lequel on itère et pour le joueur en cours 
+                score = liste_joueurs[num_joueur].score[theme]
+                #On vérifie si le score est suffisant pour valider le thème :
+                if score > 2 :
+                    tk.Label(frame,text="OK").grid(row = 1+0, column = 1)
+                else :
+                    tk.Label(frame,text="{}/3".format(str(score))).grid(row = 1+self.themeList.index(theme), column = 1)
+            #On pack la frame pour le joueur et on peut passer à la création de la frame suivante ou sortir si tous les joueurs sont traités.
+            frame.pack()
+            
+            #On incrémente la variable numéro de joueur pour passer au joueur suivant dans le prochain tour de boucle sur la liste de frames
+            num_joueur += 1
 
     def plateau(self):
         self.plateauFrame=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=400)

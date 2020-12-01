@@ -95,7 +95,16 @@ class Application(tk.Tk):
         self.playerList=[]
         for i in range(int(self.nombre_joueur)):
             score={}
-            joueur=Joueur(self.liste_joueurs[i].get(),score=score)
+            
+            if i == 0:
+                position=(0,0)
+            if i == 1:
+                position=(9,0)
+            if i == 2:
+                position=(9,10)
+            if i == 3:
+                position=(0,10)
+            joueur=Joueur(self.liste_joueurs[i].get(),score=score,position=position)
             self.playerList.append(joueur)
 
         for joueur in self.playerList:
@@ -103,7 +112,8 @@ class Application(tk.Tk):
                 joueur.score[theme]=0
 
         self.affichageQuestions(self.tourNumber,self.playerList[0])
-
+        
+        
 
 
 
@@ -116,12 +126,14 @@ class Application(tk.Tk):
 
         if self.continueGame==True:
 
+            
+            self.plateau()
             self.nombreDeTour=self.nombreDeTour+1
-            self.jeuFrame2=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=250)
+            self.jeuFrame2=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=250,height=1200)
             self.jeuFrame2.pack(side="right",expand="yes",fill="both")
             self.affichage_joueurs_scores(self.playerList)
             self.tourNumber=self.tourNumber+1
-            self.jeuFrame=tk.Frame(self.resultats)
+            self.jeuFrame=tk.Frame(self.resultats,width=250,height=1200)
             self.jeuFrame.pack(side="left",expand="yes",fill="both")
 
             #Affichage du tour en cours
@@ -144,14 +156,78 @@ class Application(tk.Tk):
 
             
             self.themeChoice=chooseTheme(self.themeList)
-            print(self.themeChoice)
+            
 
-            for i in range(len(self.themeChoice)):
-                tk.Button(self.gameFrame,text=self.themeChoice[i].libelle,command=partial(self.afficherQuestionReponses,self.themeChoice[i])).grid(row=1,column=i)
+
+            tk.Button(self.gameFrame,text="Lancer le dé",command=self.rollDice).grid(row=1,column=0)
+
+
         else:
             tk.Label(self.resultats,text="Bravo {}, tu remporte cette partie !".format(self.winner.prenom)).pack()
             #Appeler ici fonction de derniere question
 
+    def rollDice(self):
+        self.dice=random.choice([1,2,3,4,5,6])
+        tk.Label(self.gameFrame,text=self.dice).grid(row=1,column=1)
+
+       
+        tk.Button(self.gameFrame,text="sens horaire",command=self.movePlayerRight).grid(row=2,column=0)
+        tk.Button(self.gameFrame,text="sens anti horaire",command=self.movePlayerLeft).grid(row=2,column=1)
+
+
+    def movePlayerRight(self):
+        x=self.playerList[(self.tourNumber-1)%len(self.playerList)].position[0]
+        y=self.playerList[(self.tourNumber-1)%len(self.playerList)].position[1]
+        
+        if x!=9 and x+self.dice<10 and y==0:
+            x=x+self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x!=9 and x+self.dice>9 and y==0:
+            x1=9-x
+            x=9
+            y=self.dice-x1
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==9 and  y+self.dice<11:
+            y=y+self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==9 and x+self.dice>10:
+            y1=10-y
+            y=10
+            x=x-(self.dice-y1)
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif y==10 and x-self.dice>=0:
+            x=x-self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x!=0 and x-self.dice<0 and y==10:
+            x1=x
+            x=0
+            y=10-(self.dice-x1)
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==0 and y-self.dice>=0:
+            y=y-self.dice
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+        elif x==0 and y-self.dice<0:
+            y1=y
+            y=0
+            x=self.dice-y1
+            self.playerList[(self.tourNumber-1)%len(self.playerList)].position=(x,y)
+
+        
+
+        self.updatePlateau()
+        self.afficherQuestionReponses(self.themeList[0])
+
+        
+   
+        
+
+    
+    def movePlayerLeft(self):
+        self.dice=-self.dice
+        self.movePlayerRight()
+
+
+        
 
     def afficherQuestionReponses(self,theme):
         for widget in self.gameFrame.winfo_children():
@@ -260,6 +336,44 @@ class Application(tk.Tk):
                     tk.Label(self.frameScore,text="{}/3".format(joueur.score[theme])).pack()
             numero_de_joueur += 1
 
+    def plateau(self):
+        self.plateauFrame=tk.Frame(self.resultats,borderwidth="1",relief="solid",width=400)
+        self.plateauFrame.pack(side="bottom")
+        tk.Label(self.plateauFrame,text="lancer le dé").pack()
+        self.plateauJeu=tk.Frame(self.plateauFrame)
+        self.plateauJeu.pack()
+        listeColor=["Blue","white","red","green","yellow"]
+        dictionnaireTheme={"Blue":[],"white":[],"red":[],"green":[],"yellow":[]}
+        for i in range(10):
+            color=random.choice(listeColor)
+            dictionnaireTheme[color].append((0,i))
+            tk.Frame(self.plateauJeu,width=50,height=50,borderwidth="1",relief="solid",bg=color).grid(row=0,column=i)
+        for i in range(9):
+            color=random.choice(listeColor)
+            dictionnaireTheme[color].append((0,i))
+            tk.Frame(self.plateauJeu,width=50,height=50,borderwidth="1",relief="solid",bg=color).grid(row=i+1,column=0)
+        for i in range(9):
+            color=random.choice(listeColor)
+            dictionnaireTheme[color].append((0,i))
+            tk.Frame(self.plateauJeu,width=50,height=50,borderwidth="1",relief="solid",bg=color).grid(row=i+1,column=9)
+        for i in range(9):
+            color=random.choice(listeColor)
+            dictionnaireTheme[color].append([0,i])
+            tk.Frame(self.plateauJeu,width=50,height=50,borderwidth="1",relief="solid",bg=color).grid(row=10,column=i+1)
+
+        self.updatePlateau()
+
+
+
+    def updatePlateau(self):
+        for widget in self.plateauJeu.winfo_children():
+                    if isinstance(widget, tk.Label):
+                        widget.destroy()
+    
+        for player in self.playerList:
+            tk.Label(self.plateauJeu,borderwidth="1",relief="solid",text=player.prenom).grid(row=player.position[1],column=player.position[0])
+        
+            
             
 def dataPursuit():
 

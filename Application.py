@@ -100,7 +100,7 @@ class Application(tk.Tk):
 
         for joueur in self.playerList:
             for theme in self.themeList:
-                joueur.score[theme]=False
+                joueur.score[theme]=0
 
         self.affichageQuestions(self.tourNumber,self.playerList[0])
 
@@ -150,6 +150,7 @@ class Application(tk.Tk):
                 tk.Button(self.gameFrame,text=self.themeChoice[i].libelle,command=partial(self.afficherQuestionReponses,self.themeChoice[i])).grid(row=1,column=i)
         else:
             tk.Label(self.resultats,text="Bravo {}, tu remporte cette partie !".format(self.winner.prenom)).pack()
+            #Appeler ici fonction de derniere question
 
 
     def afficherQuestionReponses(self,theme):
@@ -168,8 +169,14 @@ class Application(tk.Tk):
         self.reponsesFrame.pack()
 
         if len(self.question.reponses)>1:
+
             for i in range(len(self.question.reponses)):
-                tk.Button(self.reponsesFrame,text=self.question.reponses[i].libelle,width=20,command=partial(self.recupAndCheckReponses,self.question.reponses[i])).grid(row=i%2,column=i//2)
+                if len(self.question.reponses[i].libelle)>40 and len(self.question.reponses[i].libelle)<120 :
+                    self.question.reponses[i].libelle=self.question.reponses[i].libelle[:40]+"\n"+self.question.reponses[i].libelle[41:]
+                if len(self.question.reponses[i].libelle)>120 :
+                    self.question.reponses[i].libelle=self.question.reponses[i].libelle[:40]+"\n"+self.question.reponses[i].libelle[41:80]+"\n"+self.question.reponses[i].libelle[81:]
+   
+                tk.Button(self.reponsesFrame,text=self.question.reponses[i].libelle,width=35,height=5,command=partial(self.recupAndCheckReponses,self.question.reponses[i])).grid(row=i%2,column=i//2)
         else :
             tk.Label(self.reponsesFrame,text=" Saisissez votre réponse",padx=12,pady=12).grid(row=0,column=0)
             self.reponseJoueur=tk.StringVar()
@@ -191,10 +198,12 @@ class Application(tk.Tk):
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Bravo :)").pack()
                 
-                self.playerList[actualPlayer].score[self.actualTheme]=True
-                if False not in self.playerList[actualPlayer].score:
+                self.playerList[actualPlayer].score[self.actualTheme]=self.playerList[actualPlayer].score[self.actualTheme]+1
+                #Verification condition de victoires
+                if 0 not in self.playerList[actualPlayer].score.values() and 1 not in self.playerList[actualPlayer].score.values() and 2 not in self.playerList[actualPlayer].score.values() :
                     self.continueGame=False
                     self.winner=self.playerList[actualPlayer]
+
                 nextPlayer=actualPlayer
                 self.tourNumber=self.tourNumber-1
                 tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
@@ -213,10 +222,12 @@ class Application(tk.Tk):
                 for widget in self.reponsesFrame.winfo_children():
                     widget.destroy()
                 tk.Label(self.reponsesFrame,text="Bravo :)").pack()
-                self.playerList[actualPlayer].score[self.actualTheme]=True
-                if False not in self.playerList[actualPlayer].score:
+                self.playerList[actualPlayer].score[self.actualTheme]=self.playerList[actualPlayer].score[self.actualTheme]+1
+                #Verification condition de victoires
+                if 0 not in self.playerList[actualPlayer].score.values() and 1 not in self.playerList[actualPlayer].score.values() and 2 not in self.playerList[actualPlayer].score.values() :
                     self.continueGame=False
                     self.winner=self.playerList[actualPlayer]
+
                 nextPlayer=actualPlayer
                 self.tourNumber=self.tourNumber-1
                 tk.Button(self.reponsesFrame,text="Joueur Suivant",command=partial(self.affichageQuestions,self.tourNumber,self.playerList[nextPlayer])).pack()
@@ -243,10 +254,10 @@ class Application(tk.Tk):
             for theme in joueur.score.keys():
                 tk.Label(self.frameScore,text = "Thème ={}".format(theme.libelle)).pack()
                 print(id(joueur.score))
-                if joueur.score[theme] == True:
+                if joueur.score[theme] >2 :
                     tk.Label(self.frameScore,text="OK").pack()
                 else:
-                    tk.Label(self.frameScore,text="Pas OK").pack()
+                    tk.Label(self.frameScore,text="{}/3".format(joueur.score[theme])).pack()
             numero_de_joueur += 1
 
             

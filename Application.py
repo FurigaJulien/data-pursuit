@@ -93,9 +93,15 @@ class Application(tk.Tk):
 
     def startPlaying(self):
         self.playerList=[]
+        couleurs_disponibles = ["red", "green", "blue", "cyan", "purple", "orange"]
         for i in range(int(self.nombre_joueur)):
             score={}
-            joueur=Joueur(self.liste_joueurs[i].get(),score=score)
+            #On choisit une couleur aléatoire dans la liste de couleurs dispo :
+            couleur_joueur = random.choice(couleurs_disponibles)
+            #On supprime la couleur de la liste de couleurs dispo :
+            couleurs_disponibles.remove(couleur_joueur)
+            #On crée notre objet joueur :
+            joueur=Joueur(self.liste_joueurs[i].get(),score=score, couleur = couleur_joueur)
             self.playerList.append(joueur)
 
         for joueur in self.playerList:
@@ -149,8 +155,9 @@ class Application(tk.Tk):
             for i in range(len(self.themeChoice)):
                 tk.Button(self.gameFrame,text=self.themeChoice[i].libelle,command=partial(self.afficherQuestionReponses,self.themeChoice[i])).grid(row=1,column=i)
         else:
+
             tk.Label(self.resultats,text="Bravo {}, tu remporte cette partie !".format(self.winner.prenom)).pack()
-            #Appeler ici fonction de derniere question
+
 
 
     def afficherQuestionReponses(self,theme):
@@ -243,13 +250,47 @@ class Application(tk.Tk):
 
 
     def affichage_joueurs_scores(self, liste_joueurs):
-        self.frameScore = tk.Frame(self.jeuFrame2)
-        self.frameScore.pack()
-        tk.Label(self.frameScore,text="Scores :").pack()   
+        """Fonction qui gère l'affichage des scores de chaque joueur"""
+        #On crée le label titre de la frame de droite du jeu : 
+        tk.Label(self.jeuFrame2,text="Scores :").pack()
 
-        #Boucle qui crée un bloc par joueur grâce à la liste de joueurs passée en paramètre de la fonction
-        numero_de_joueur = 1
+        #On crée une liste de frames qui accueillera les frames des différents joueurs (taille variable) :
+        liste_frames = []
+
+        #On crée une liste de thèmes facile à utiliser par la suite à partir de l'attribut themeList :
+        liste_themes = []
+        for theme in self.themeList :
+            liste_themes.append(theme.libelle)
+
+        #On itère sur notre liste de joueur pour ajouter le bon nombre de frames
         for joueur in liste_joueurs:
+
+            liste_frames.append(tk.Frame(self.jeuFrame2))
+
+        #On crée un numero de joueur qui commence à zéro et sera incrémenté pour prendre le bon prénom dans la liste d'objets joueurs.
+        num_du_joueur = 0
+
+        #On itère sur nos frames dans la liste afin de remplir chacune comme il faut :
+        for frame in liste_frames :
+
+            #on crée un label joueur :
+            tk.Label(frame, text = "Joueur :").grid(row = 0, column = 0)
+            #on crée un label pour le prénom du joueur pris dans la liste d'objets joueurs et dont la couleur correspond à l'attribut couleur de cet objet joueur :
+            tk.Label(frame, text = liste_joueurs[num_du_joueur].prenom, fg = liste_joueurs[num_du_joueur].couleur,).grid(row = 0, column = 1)
+
+            #On incrémente la variable numéro de joueur pour passer au joueur suivant dans le prochain tour de boucle sur la liste de frames
+            num_du_joueur += 1
+
+            #On boucle sur les thèmes pour les afficher sous le nom du joueur et ce quel que soit le nombre de thèmes
+            for theme in liste_themes :
+                #On crée le label qui affichera le nom du thème pour le joueur en cours :
+                tk.Label(frame, text = theme+" :").grid(row = 1+liste_themes.index(theme), column = 0)
+                #On crée le label qui affichera le statut de réussite du thème pour le joueur en cours :
+                tk.Label(frame, text = "OK").grid(row = 1+liste_themes.index(theme), column = 1)
+
+            #On pack la frame pour le joueur et on peut passer à la création de la frame suivante ou sortir si tous les joueurs sont traités.
+            frame.pack()
+
             tk.Label(self.frameScore,text="Joueur : {}".format(joueur.prenom)).pack(pady=12)
             for theme in joueur.score.keys():
                 tk.Label(self.frameScore,text = "Thème ={}".format(theme.libelle)).pack()

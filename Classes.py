@@ -2,10 +2,9 @@ class Joueur():
 
     """Création de la classe joueur"""
 
-    def __init__(self,prenom,score,couleur,position=()):
+    def __init__(self,prenom,score={},position=()):
         self.prenom=prenom
         self.score=score
-        self.couleur=couleur
         self.position=position
         # Le score sera stocké dans un dictionnaire, ou les clés seront tout les thèmes, récupéré en BDD, et ou la valeur sera :
         # True : Le joueur a déja répondu bon a une question de ce thème, il possède donc le "camembert"

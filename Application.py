@@ -91,16 +91,11 @@ class Application(tk.Tk):
         self.BoutonValidation = tk.Button(self.resultats, text = "Valider",command=self.startPlaying, height=6, width=20, bd=2, bg="#dbdbdb")
         self.BoutonValidation.pack(side="bottom")
 
-
     def startPlaying(self):
         self.playerList=[]
-        couleurs_disponibles = ["red", "green", "blue", "cyan", "purple", "orange"]
         for i in range(int(self.nombre_joueur)):
             score={}
-            #On choisit une couleur aléatoire dans la liste de couleurs dispo :
-            couleur_joueur = random.choice(couleurs_disponibles)
-            #On supprime la couleur de la liste de couleurs dispo :
-            couleurs_disponibles.remove(couleur_joueur)
+            
             if i == 0:
                 position=(0,0)
             if i == 1:
@@ -109,8 +104,7 @@ class Application(tk.Tk):
                 position=(9,10)
             if i == 3:
                 position=(0,10)
-            #On crée notre objet joueur :
-            joueur=Joueur(self.liste_joueurs[i].get(),score=score, couleur = couleur_joueur,position=position)
+            joueur=Joueur(self.liste_joueurs[i].get(),score=score,position=position)
             self.playerList.append(joueur)
 
         for joueur in self.playerList:
@@ -119,6 +113,9 @@ class Application(tk.Tk):
 
         self.affichageQuestions(self.tourNumber,self.playerList[0])
         
+        
+
+
 
 
     """def affichageQuestions(self):"""
@@ -226,7 +223,7 @@ class Application(tk.Tk):
 
     
     def movePlayerLeft(self):
-
+    def movePlayerRight(self):
         x=self.playerList[(self.tourNumber-1)%len(self.playerList)].position[0]
         y=self.playerList[(self.tourNumber-1)%len(self.playerList)].position[1]
         
@@ -361,7 +358,7 @@ class Application(tk.Tk):
             
 
 
-    def affichage_joueurs_scores(self, liste_joueurs):
+     def affichage_joueurs_scores(self, liste_joueurs):
         """Fonction qui gère l'affichage des scores de chaque joueur pour chaque thème"""
         #On crée le label titre de la frame de droite du jeu : 
         tk.Label(self.jeuFrame2,text="Scores :").pack()

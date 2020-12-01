@@ -250,25 +250,19 @@ class Application(tk.Tk):
 
 
     def affichage_joueurs_scores(self, liste_joueurs):
-        """Fonction qui gère l'affichage des scores de chaque joueur"""
+        """Fonction qui gère l'affichage des scores de chaque joueur pour chaque thème"""
         #On crée le label titre de la frame de droite du jeu : 
         tk.Label(self.jeuFrame2,text="Scores :").pack()
 
         #On crée une liste de frames qui accueillera les frames des différents joueurs (taille variable) :
         liste_frames = []
 
-        #On crée une liste de thèmes facile à utiliser par la suite à partir de l'attribut themeList :
-        liste_themes = []
-        for theme in self.themeList :
-            liste_themes.append(theme.libelle)
-
-        #On itère sur notre liste de joueur pour ajouter le bon nombre de frames
+        #On itère sur notre liste de joueur pour ajouter le bon nombre de frames dans une liste de frames :
         for joueur in liste_joueurs:
-
             liste_frames.append(tk.Frame(self.jeuFrame2))
 
         #On crée un numero de joueur qui commence à zéro et sera incrémenté pour prendre le bon prénom dans la liste d'objets joueurs.
-        num_du_joueur = 0
+        num_joueur = 0
 
         #On itère sur nos frames dans la liste afin de remplir chacune comme il faut :
         for frame in liste_frames :
@@ -276,32 +270,25 @@ class Application(tk.Tk):
             #on crée un label joueur :
             tk.Label(frame, text = "Joueur :").grid(row = 0, column = 0)
             #on crée un label pour le prénom du joueur pris dans la liste d'objets joueurs et dont la couleur correspond à l'attribut couleur de cet objet joueur :
-            tk.Label(frame, text = liste_joueurs[num_du_joueur].prenom, fg = liste_joueurs[num_du_joueur].couleur,).grid(row = 0, column = 1)
-
-            #On incrémente la variable numéro de joueur pour passer au joueur suivant dans le prochain tour de boucle sur la liste de frames
-            num_du_joueur += 1
+            tk.Label(frame, text = liste_joueurs[num_joueur].prenom, fg = liste_joueurs[num_joueur].couleur,).grid(row = 0, column = 1)
 
             #On boucle sur les thèmes pour les afficher sous le nom du joueur et ce quel que soit le nombre de thèmes
-            for theme in liste_themes :
+            for theme in self.themeList :
                 #On crée le label qui affichera le nom du thème pour le joueur en cours :
-                tk.Label(frame, text = theme+" :").grid(row = 1+liste_themes.index(theme), column = 0)
-                #On crée le label qui affichera le statut de réussite du thème pour le joueur en cours :
-                tk.Label(frame, text = "OK").grid(row = 1+liste_themes.index(theme), column = 1)
-
+                tk.Label(frame, text = theme.libelle+" :").grid(row = 1+self.themeList.index(theme), column = 0)
+                #On remplit une variable score avec le score de thème pour le thème sur lequel on itère et pour le joueur en cours 
+                score = liste_joueurs[num_joueur].score[theme]
+                #On vérifie si le score est suffisant pour valider le thème :
+                if score > 2 :
+                    tk.Label(frame,text="OK").grid(row = 1+0, column = 1)
+                else :
+                    tk.Label(frame,text="{}/3".format(str(score))).grid(row = 1+self.themeList.index(theme), column = 1)
             #On pack la frame pour le joueur et on peut passer à la création de la frame suivante ou sortir si tous les joueurs sont traités.
             frame.pack()
-
-            tk.Label(self.frameScore,text="Joueur : {}".format(joueur.prenom)).pack(pady=12)
-            for theme in joueur.score.keys():
-                tk.Label(self.frameScore,text = "Thème ={}".format(theme.libelle)).pack()
-                print(id(joueur.score))
-                if joueur.score[theme] >2 :
-                    tk.Label(self.frameScore,text="OK").pack()
-                else:
-                    tk.Label(self.frameScore,text="{}/3".format(joueur.score[theme])).pack()
-            numero_de_joueur += 1
-
             
+            #On incrémente la variable numéro de joueur pour passer au joueur suivant dans le prochain tour de boucle sur la liste de frames
+            num_joueur += 1
+
 def dataPursuit():
 
         app=Application()

@@ -242,7 +242,7 @@ class Application(tk.Tk):
         #On crée le label titre de la frame de droite du jeu : 
         tk.Label(self.jeuFrame2,text="Scores :").pack()
 
-        #On crée une liste de frames qui accueillera les frames des différents joueurs (taille variable)
+        #On crée une liste de frames qui accueillera les frames des différents joueurs (taille variable) :
         liste_frames = []
 
         #On crée une liste de thèmes facile à utiliser par la suite à partir de l'attribut themeList :

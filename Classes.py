@@ -14,9 +14,10 @@ class Joueur():
 
 class Theme():
     
-    def __init__(self,id,libelle):
+    def __init__(self,id,libelle,color):
         self.id=id
         self.libelle=libelle
+        self.color=color
 
     def __repr__(self):
         return self.libelle

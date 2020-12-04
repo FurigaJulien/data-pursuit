@@ -1,5 +1,6 @@
 import mysql.connector
 from Classes import Theme,Question,Reponses
+import random
 class BDD():
 
 
@@ -23,12 +24,15 @@ class BDD():
         cls.connect()
         themeList=[]
         query="SELECT * FROM theme"
+        listeColor=["#a2c7bf","#ff8b94","#6e2c35","#98ddb5","#00b1e7"]
         cls.cursor.execute(query)
         
         for row in cls.cursor.fetchall():
             id=int(row[0])
             libelle=str(row[1])
-            theme=Theme(id,libelle)
+            color=random.choice(listeColor)
+            listeColor.remove(color)
+            theme=Theme(id,libelle,color)
             themeList.append(theme)
         cls.close()
         return themeList
@@ -37,7 +41,7 @@ class BDD():
     def getAllQuestions(cls,themeList):
         cls.connect()
         
-        query="SELECT * from questions where theme_question={}"
+        query="SELECT * from questions where id_theme={}"
         questionDict={}
         for theme in themeList:
 

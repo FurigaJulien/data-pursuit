@@ -103,12 +103,25 @@ class Application(tk.Tk):
             #On crée notre objet joueur :
             joueur=Joueur(self.liste_joueurs[i].get(),score=score, couleur = couleur_joueur)
             self.playerList.append(joueur)
+            print(self.liste_joueurs[i].get())
 
         for joueur in self.playerList:
             for theme in self.themeList:
                 joueur.score[theme]=0
 
-        self.affichageQuestions(self.tourNumber,self.playerList[0])
+        booleen_continuer = True
+
+        for i in range(int(self.nombre_joueur)):
+            if len(self.liste_joueurs[i].get()) == 0 :
+                booleen_continuer = False
+                
+        if booleen_continuer == True:
+            self.affichageQuestions(self.tourNumber,self.playerList[0])
+
+        else :
+            self.choixDesNoms()
+
+
 
 
 
